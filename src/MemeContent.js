@@ -15,21 +15,27 @@ export default function MemeContent() {
     });
   }
 
+  function handleSubmit(event) {
+    event.preventDefault();
+  }
+
   return (
     <main>
-      <input
-        name="top"
-        type="text"
-        onChange={handleChange}
-        value={content.topText}
-      />
-      <input
-        name="bottom"
-        type="text"
-        onChange={handleChange}
-        value={content.bottomText}
-      />
-      <button>Generate Meme Template</button>
+      <form onSubmit={handleSubmit}>
+        <input
+          name="top"
+          type="text"
+          onChange={handleChange}
+          value={content.topText}
+        />
+        <input
+          name="bottom"
+          type="text"
+          onChange={handleChange}
+          value={content.bottomText}
+        />
+        <button>Generate Meme Template</button>
+      </form>
     </main>
   );
 }
