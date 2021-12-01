@@ -1,12 +1,14 @@
-import { useState } from "react";
+import { useState, useEffect } from "react";
 
 export default function MemeContent() {
   const [content, setContent] = useState([
     {
       topText: "",
-      bottomText: ""
+      bottomText: "",
+      memeTemplate: "https://i.imgflip.com/3oevdk.jpg"
     }
   ]);
+  const [memeArray, setMemeArray] = useState([]);
 
   function handleChange(event) {
     const { name, value } = event.target; //destructuring
@@ -18,6 +20,21 @@ export default function MemeContent() {
   function handleSubmit(event) {
     event.preventDefault();
   }
+
+  function handleClick() {
+    const randomNumber = Math.floor(Math.random() * memeArray.length);
+    const selectedMeme = memeArray[randomNumber].url;
+    setContent((prevContent) => ({
+      ...prevContent,
+      memeTemplate: selectedMeme
+    }));
+  }
+
+  useEffect(() => {
+    fetch("https://api.imgflip.com/get_memes")
+      .then((res) => res.json())
+      .then((content) => setMemeArray(content.data.memes));
+  });
 
   return (
     <main>
@@ -34,8 +51,15 @@ export default function MemeContent() {
           onChange={handleChange}
           value={content.bottomText}
         />
-        <button>Generate Meme Template</button>
       </form>
+      <div>
+        <button onClick={handleClick}>Generate New Meme Template</button>
+        <img
+          style={{ width: "500px", height: "500px" }}
+          src={content.memeTemplate}
+          alt="meme"
+        />
+      </div>
     </main>
   );
 }
